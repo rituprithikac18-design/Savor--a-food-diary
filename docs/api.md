@@ -27,7 +27,7 @@ POST /auth/login
 ### Request
 ```json
 {
-    "email":"ritu@gmail.com"
+    "email":"ritu@gmail.com",
     "password":"123456"
 }
 ```
@@ -37,4 +37,23 @@ POST /auth/login
     "token":"JWT_TOKEN"
 }
 ```
+# Users
+---
+## Get My Profile
+GET /users/me
+Returns logged in user's profile.
 
+---
+## Update Profile
+PUT /users/me
+Request
+```json
+{
+    "bio":"Food Geek",
+    "city":"Mumbai"
+}
+```
+---
+## Get User
+GET /users/:id
+Returns public profile.
