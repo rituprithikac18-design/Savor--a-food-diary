@@ -24,8 +24,7 @@ lat NUMERIC
 lng NUMERIC
 cuisine_tags TEXT[]
 avg_rating NUMERIC
-created_by BIGINT
-approved BOOLEAN
+created_by BIGINT (FK → users.user_id)approved BOOLEAN
 
 # Dishes
 dishes
@@ -41,8 +40,8 @@ created_at TIMESTAMPTZ
 restaurant_dish
 ------
 restaurant_dish_id BIGSERIAL PRIMARY KEY
-restaurant_id BIGINT
-dish_id BIGINT
+restaurant_id BIGINT (FK → restaurants.restaurant_id)
+dish_id BIGINT (FK → dishes.dish_id)
 price NUMERIC
 love_count INT
 avg_rating NUMERIC
@@ -51,8 +50,8 @@ avg_rating NUMERIC
 reviews
 ------
 review_id BIGSERIAL PRIMARY KEY
-user_id BIGINT
-restaurant_dish_id BIGINT
+user_id BIGINT (FK → users.user_id)
+restaurant_dish_id BIGINT (FK → restaurant_dish.restaurant_dish_id)
 rating SMALLINT
 text TEXT
 sentiment_score NUMERIC
@@ -65,8 +64,8 @@ created_at TIMESTAMPTZ
 followers
 ------
 follow_id BIGSERIAL PRIMARY KEY
-follower_id BIGINT
-following_id BIGINT
+follower_id BIGINT (FK → users.user_id)
+following_id BIGINT (FK → users.user_id)
 created_at TIMESTAMPTZ
 UNIQUE(follower_id, following_id)
 
@@ -74,8 +73,7 @@ UNIQUE(follower_id, following_id)
 lists
 ------
 list_id BIGSERIAL PRIMARY KEY
-user_id BIGINT
-title VARCHAR(200)
+user_id BIGINT (FK → users.user_id)title VARCHAR(200)
 description TEXT
 is_public BOOLEAN
 created_at TIMESTAMPTZ
@@ -84,30 +82,62 @@ created_at TIMESTAMPTZ
 bookmarks
 ------
 bookmark_id BIGSERIAL PRIMARY KEY
-user_id BIGINT
-restaurant_dish_id BIGINT
+user_id BIGINT (FK → users.user_id)
+restaurant_dish_id BIGINT (FK → restaurant_dish.restaurant_dish_id)
+created_at TIMESTAMPTZ
+
+UNIQUE(user_id, restaurant_dish_id)
 
 # Comments
 comments
 ------
 comment_id BIGSERIAL PRIMARY KEY
-user_id BIGINT
-review_id BIGINT 
+user_id BIGINT (FK → users.user_id)
+review_id BIGINT (FK → reviews.review_id)
 text TEXT
 created_at TIMESTAMPTZ
 
 # Likes
 ------
 like_id BIGSERIAL PRIMARY KEY
-user_id BIGINT
-review_id BIGINT
+user_id BIGINT (FK → users.user_id)
+review_id BIGINT (FK → reviews.review_id)
+created_at TIMESTAMPTZ
+UNIQUE(user_id,review_id)
 
 # Notifications
 notifications
 ------
 notification_id BIGSERIAL PRIMARY KEY
-user_id BIGINT
-type VARCHAR(50) 
+user_id BIGINT (FK → users.user_id)type VARCHAR(50) 
 message TEXT
 is_read BOOLEAN 
 created_at TIMESTAMPTZ
+
+# Overview 
+
+users
+│
+├── restaurants.created_by
+├── reviews.user_id
+├── followers.follower_id
+├── followers.following_id
+├── lists.user_id
+├── bookmarks.user_id
+├── comments.user_id
+├── likes.user_id
+└── notifications.user_id
+
+restaurants
+└── restaurant_dish.restaurant_id
+
+dishes
+└── restaurant_dish.dish_id
+
+restaurant_dish
+├── reviews.restaurant_dish_id
+└── bookmarks.restaurant_dish_id
+
+reviews
+├── comments.review_id
+└── likes.review_id
