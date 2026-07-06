@@ -57,3 +57,38 @@ Request
 ## Get User
 GET /users/:id
 Returns public profile.
+
+# Restaurants
+---
+## Search Restaurants
+GET /restaurants
+Query Parameters
+name
+city 
+cusine
+/restaurants?city=Mumbai
+---
+## Restaurant Details
+GET /restaurants/:id
+#Reviews 
+---
+## Create Review
+POST /reviews
+Request
+```json
+{
+    "restaurant_id":18,
+    "rating":4.5,
+    "title":"Amazing",
+    "content":"Loved the pasta."
+}
+```
+---
+## Get Restaurant Reviews 
+GET /restaurants/:id/reviews
+---
+## Update Review
+PUT /reviews/:id
+---
+## Delete Review
+DELETE /reviews/:id
