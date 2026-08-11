@@ -19,10 +19,20 @@ class Settings(BaseSettings):
     REDIS_URL: str = "redis://localhost:6379/0"
     
     # Auth
-    SECRET_KEY: str = "super_secret_key_change_in_prod" # RS256 in prod, keeping string for now
-    ALGORITHM: str = "HS256"
+    # Use RS256 algorithm per SRS
+    ALGORITHM: str = "RS256"
+    # For local dev we will auto-generate keys if they don't exist, but you can provide paths here
+    PRIVATE_KEY_PATH: str = "private_key.pem"
+    PUBLIC_KEY_PATH: str = "public_key.pem"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 15
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7
+    
+    # Google OAuth
+    GOOGLE_CLIENT_ID: str = ""
+    GOOGLE_CLIENT_SECRET: str = ""
+    
+    # Email settings (mocked)
+    MOCK_EMAILS: bool = True
 
     model_config = SettingsConfigDict(env_file=".env", case_sensitive=True)
 
